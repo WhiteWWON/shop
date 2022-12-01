@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RequestMapping("/members")
 @Controller
@@ -53,5 +55,33 @@ public class MemberController {
     public String loginError(Model model){
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요");
         return "/member/memberLoginForm";
+    }
+
+    @GetMapping(value = "/modify")
+    public String memberInfo(Principal principal, Model model){
+        try{
+            MemberFormDto memberFormDto = memberService.getMemberInfo(principal.getName());
+            model.addAttribute("memberFormDto", memberFormDto);
+        }catch (EntityNotFoundException e){
+            model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
+            model.addAttribute("MemberFormDto", new MemberFormDto());
+            return "member/memberForm";
+        }
+        return "member/memberForm";
+    }
+
+    @PostMapping(value = "/modify")
+    public String memberModify(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            return "member/memberForm";
+        }
+        try {
+            memberService.updateMember(memberFormDto);
+        } catch (Exception e){
+            model.addAttribute("errorMessage", "회원 수정 중 에러가 발생하였습니다.");
+            return "member/memberForm";
+        }
+
+        return "redirect:/";
     }
 }

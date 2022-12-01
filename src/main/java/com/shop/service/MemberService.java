@@ -1,5 +1,6 @@
 package com.shop.service;
 
+import com.shop.dto.MemberFormDto;
 import com.shop.entity.Member;
 import com.shop.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 @Service
@@ -42,5 +44,23 @@ public class MemberService implements UserDetailsService {
                 .password(member.getPassword())
                 .roles(member.getRole().toString())
                 .build();
+    }
+
+    public MemberFormDto getMemberInfo(String email) throws UsernameNotFoundException {
+        Member member = memberRepository.findByEmail(email);
+        if(member == null){
+            throw new UsernameNotFoundException(email);
+        }
+        MemberFormDto memberFormDto = MemberFormDto.of(member);
+        return memberFormDto;
+    }
+
+    public Long updateMember(MemberFormDto memberFormDto) throws Exception {
+        //상품 수정
+        Member member = memberRepository.findById(memberFormDto.getId())
+                .orElseThrow(EntityNotFoundException::new);
+        member.updateMember(memberFormDto);
+
+        return member.getId();
     }
 }

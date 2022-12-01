@@ -11,7 +11,7 @@ import java.io.IOException;
 public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     //시간 참조 설정.
-    public final Integer SESSION_TIMEOUT_IN_SECONDS = 60 * 5;//1 minute
+    public final Integer SESSION_TIMEOUT_IN_SECONDS = 60 * 1;//1 minute
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
