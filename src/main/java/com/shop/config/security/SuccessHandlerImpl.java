@@ -17,6 +17,7 @@ public class SuccessHandlerImpl implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         request.getSession().setMaxInactiveInterval(SESSION_TIMEOUT_IN_SECONDS);
+        // 사용자에게 세션이 끊어졌다라고 알려주면 좋다.
         response.sendRedirect("/");
     }
 }
