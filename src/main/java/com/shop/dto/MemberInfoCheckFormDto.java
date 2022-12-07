@@ -11,7 +11,7 @@ import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
-public class MemberCheckFormDto {
+public class MemberInfoCheckFormDto {
 
     private Long id;
 
@@ -24,7 +24,7 @@ public class MemberCheckFormDto {
     private String password;
 
     private static ModelMapper modelMapper = new ModelMapper();
-    public static MemberCheckFormDto of(Member member){
-        return modelMapper.map(member, MemberCheckFormDto.class);
+    public static MemberInfoCheckFormDto of(Member member){
+        return modelMapper.map(member, MemberInfoCheckFormDto.class);
     }
 }

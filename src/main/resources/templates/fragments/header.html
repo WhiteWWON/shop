@@ -19,6 +19,9 @@
         <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
           <a class="nav-link" href="/admin/items">상품 관리</a>
         </li>
+        <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
+          <a class="nav-link" href="/admin/items">사용자별 구매 현황</a>
+        </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" href="/cart">장바구니</a>
         </li>
@@ -29,7 +32,7 @@
           <a class="nav-link" href="/members/login">로그인</a>
         </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
-          <a class="nav-link" href="/members/modify">회원정보 수정</a>
+          <a class="nav-link" href="/members/preModify">회원정보 수정</a>
         </li>
         <li class="nav-item" sec:authorize="isAuthenticated()">
           <a class="nav-link" href="/members/logout">로그아웃</a>

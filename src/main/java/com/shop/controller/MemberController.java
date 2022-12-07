@@ -1,6 +1,7 @@
 package com.shop.controller;
 
 import com.shop.dto.MemberFormDto;
+import com.shop.dto.MemberInfoCheckFormDto;
 import com.shop.entity.Member;
 import com.shop.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +35,15 @@ public class MemberController {
     @PostMapping(value = "/new")
     public String newMember(@Valid MemberFormDto memberFormDto,
                             BindingResult bindingResult, Model model){
+        /*  비밀번호 입력 확인 */
+        if(!memberFormDto.getPassword().equals(memberFormDto.getPassword_chk())){
+            FieldError fieldError = new FieldError("memberFormDto", "password_chk", "비밀번호가 일치하지 않습니다.");
+            bindingResult.addError(fieldError);
+        }
         if(bindingResult.hasErrors()){
             return "member/memberForm";
         }
+
         try {
             Member member = Member.createMember(memberFormDto, passwordEncoder);
             memberService.saveMember(member);
@@ -43,7 +51,7 @@ public class MemberController {
             model.addAttribute("errorMessage", e.getMessage());
             return "member/memberForm";
         }
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     @GetMapping(value = "/login")
@@ -57,10 +65,29 @@ public class MemberController {
         return "/member/memberLoginForm";
     }
 
+    @GetMapping(value = "/preModify")
+    public String memberInfoCheck(Principal principal, Model model){
+
+        MemberInfoCheckFormDto memberInfoCheckFormDto = new MemberInfoCheckFormDto();
+        memberInfoCheckFormDto.setEmail(principal.getName());
+        model.addAttribute("memberInfoCheckFormDto", memberInfoCheckFormDto);
+
+        return "member/memberInfoCheckForm";
+    }
+
     @GetMapping(value = "/modify")
-    public String memberInfo(Principal principal, Model model){
+    public String memberInfo(@Valid MemberInfoCheckFormDto memberInfoCheckFormDto, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            return "member/memberInfoCheckForm";
+        }
         try{
-            MemberFormDto memberFormDto = memberService.getMemberInfo(principal.getName());
+            MemberFormDto memberFormDto = memberService.getMemberInfo(memberInfoCheckFormDto.getEmail());
+            /* 비밀번호 확인 */
+            if(!passwordEncoder.matches(memberInfoCheckFormDto.getPassword(), memberFormDto.getPassword())) {
+                FieldError fieldError = new FieldError("memberInfoCheckForm", "password", "입력하신 비밀번호가 일치하지 않습니다.");
+                bindingResult.addError(fieldError);
+                return "member/memberInfoCheckForm";
+            }
             model.addAttribute("memberFormDto", memberFormDto);
         }catch (EntityNotFoundException e){
             model.addAttribute("errorMessage", "존재하지 않는 회원입니다.");
@@ -72,6 +99,11 @@ public class MemberController {
 
     @PostMapping(value = "/modify")
     public String memberModify(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model){
+        /*  비밀번호 입력 확인 */
+        if(!memberFormDto.getPassword().equals(memberFormDto.getPassword_chk())){
+            FieldError fieldError = new FieldError("memberFormDto", "password_chk", "비밀번호가 일치하지 않습니다.");
+            bindingResult.addError(fieldError);
+        }
         if(bindingResult.hasErrors()){
             return "member/memberForm";
         }

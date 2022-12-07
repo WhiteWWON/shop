@@ -56,11 +56,10 @@ public class MemberService implements UserDetailsService {
     }
 
     public Long updateMember(MemberFormDto memberFormDto) throws Exception {
-        //상품 수정
+        //회원정보 수정
         Member member = memberRepository.findById(memberFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
         member.updateMember(memberFormDto);
-
         return member.getId();
     }
 }
