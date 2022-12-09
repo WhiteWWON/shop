@@ -35,7 +35,8 @@ public class MemberController {
     @PostMapping(value = "/new")
     public String newMember(@Valid MemberFormDto memberFormDto,
                             BindingResult bindingResult, Model model){
-        /*  비밀번호 입력 확인 */
+        /*  비밀번호 입력 확인  --> 프론트에서 스크립트 체크로 */
+        /* Member class 에서 하도록 수정 또는 프론트 */
         if(!memberFormDto.getPassword().equals(memberFormDto.getPassword_chk())){
             FieldError fieldError = new FieldError("memberFormDto", "password_chk", "비밀번호가 일치하지 않습니다.");
             bindingResult.addError(fieldError);
@@ -83,6 +84,7 @@ public class MemberController {
         try{
             MemberFormDto memberFormDto = memberService.getMemberInfo(memberInfoCheckFormDto.getEmail());
             /* 비밀번호 확인 */
+            /* 메서드로 처리하도록 변경 */
             if(!passwordEncoder.matches(memberInfoCheckFormDto.getPassword(), memberFormDto.getPassword())) {
                 FieldError fieldError = new FieldError("memberInfoCheckForm", "password", "입력하신 비밀번호가 일치하지 않습니다.");
                 bindingResult.addError(fieldError);
