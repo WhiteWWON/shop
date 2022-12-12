@@ -71,10 +71,10 @@
         </div>
 -->
         <div th:if="${#strings.isEmpty(memberFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/members/new'}" type="submit" class="btn btn-primary" onclick="pwdChk()">회원 가입</button>
+            <button th:formaction="@{'/members/new'}" type="submit" class="btn btn-primary">회원 가입</button>
         </div>
         <div th:unless="${#strings.isEmpty(memberFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/members/modify'}" type="submit" class="btn btn-primary" onclick="pwdChk()">회원 수정</button>
+            <button th:formaction="@{'/members/modify'}" type="submit" class="btn btn-primary">회원 수정</button>
         </div>
         <input type="hidden" th:field="*{id}" class="form-control">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">

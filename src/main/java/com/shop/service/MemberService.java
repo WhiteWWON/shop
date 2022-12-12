@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -55,11 +56,11 @@ public class MemberService implements UserDetailsService {
         return memberFormDto;
     }
 
-    public Long updateMember(MemberFormDto memberFormDto) throws Exception {
+    public Long updateMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) throws Exception {
         //회원정보 수정
         Member member = memberRepository.findById(memberFormDto.getId())
                 .orElseThrow(EntityNotFoundException::new);
-        member.updateMember(memberFormDto);
+        member.updateMember(memberFormDto, passwordEncoder);
         return member.getId();
     }
 }
