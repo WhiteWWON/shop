@@ -22,6 +22,18 @@
                 alert(errorMessage);
             }
         });
+
+        function pwdChk() {
+            const pwd1 = document.getElementById('password').value;
+            const pwd2 = document.getElementById('password_chk').value;
+            if(pwd1 != pwd2){
+                //console.log(pwd1);
+                //console.log(pwd2);
+                return false;
+            }else {
+                return true;
+            }
+        }
     </script>
 
 </th:block>
@@ -59,10 +71,10 @@
         </div>
 -->
         <div th:if="${#strings.isEmpty(memberFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/members/new'}" type="submit" class="btn btn-primary">회원 가입</button>
+            <button th:formaction="@{'/members/new'}" type="submit" class="btn btn-primary" onclick="pwdChk()">회원 가입</button>
         </div>
         <div th:unless="${#strings.isEmpty(memberFormDto.id)}" style="text-align: center">
-            <button th:formaction="@{'/members/modify'}" type="submit" class="btn btn-primary">회원 수정</button>
+            <button th:formaction="@{'/members/modify'}" type="submit" class="btn btn-primary" onclick="pwdChk()">회원 수정</button>
         </div>
         <input type="hidden" th:field="*{id}" class="form-control">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
