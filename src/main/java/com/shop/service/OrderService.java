@@ -1,8 +1,6 @@
 package com.shop.service;
 
-import com.shop.dto.OrderDto;
-import com.shop.dto.OrderHistDto;
-import com.shop.dto.OrderItemDto;
+import com.shop.dto.*;
 import com.shop.entity.*;
 import com.shop.repository.ItemImgRepository;
 import com.shop.repository.ItemRepository;
@@ -106,5 +104,10 @@ public class OrderService {
         orderRepository.save(order);
 
         return order.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MemberOrderDto> getMemberOrderPage(MemberSearchFormDto memberSearchFormDto, Pageable pageable){
+        return orderRepository.getMemberOrderPage(memberSearchFormDto,pageable);
     }
 }

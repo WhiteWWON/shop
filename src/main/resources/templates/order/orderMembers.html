@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+
+        $(document).ready(function(){
+            $("#searchBtn").on("click",function(e) {
+                e.preventDefault();
+                page(0);
+            });
+        });
+
+      /*  function page(page){
+            var searchDateType = $("#searchDateType").val();
+            var searchSellStatus = $("#searchSellStatus").val();
+            var searchBy = $("#searchBy").val();
+            var searchQuery = $("#searchQuery").val();
+
+            location.href="/admin/items/" + page + "?searchDateType=" + searchDateType
+                + "&searchSellStatus=" + searchSellStatus
+                + "&searchBy=" + searchBy
+                + "&searchQuery=" + searchQuery;
+        }*/
+
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+        select{
+            margin-right:10px;
+        }
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <table class="table">
+        <thead>
+        <tr>
+            <td>사용자 아이디</td>
+            <td>사용자 email</td>
+            <td>사용자 이름</td>
+            <td>주문 아이디</td>
+            <td>주문 상태</td>
+            <td>주문 날짜</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="memOrd, status: ${memberOrders.getContent()}">
+            <td th:text="${memOrd.memberId}"></td>
+            <td th:text="${memOrd.email}"></td>
+            <td th:text="${memOrd.name}"></td>
+            <td th:text="${memOrd.orderId}"></td>
+            <td th:text="${memOrd.orderStatus}"></td>
+            <td th:text="${memOrd.orderDate}"></td>
+
+           <!-- <td>
+                <a th:href="'/admin/item/'+${item.id}" th:text="${item.itemNm}"></a>
+            </td>-->
+
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</html>

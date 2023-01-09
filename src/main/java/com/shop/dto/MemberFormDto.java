@@ -38,4 +38,6 @@ public class MemberFormDto {
     public static MemberFormDto of(Member member){
         return modelMapper.map(member,MemberFormDto.class);
     }
+
+    /* 여기에서 패스워드 체크 + 주소 길이 체크를 bindingResult 에 넣는다.*/
 }

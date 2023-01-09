@@ -1,5 +1,7 @@
 package com.shop.controller;
 
+import com.shop.dto.MemberOrderDto;
+import com.shop.dto.MemberSearchFormDto;
 import com.shop.dto.OrderDto;
 import com.shop.dto.OrderHistDto;
 import com.shop.service.OrderService;
@@ -42,9 +44,6 @@ public class OrderController {
         }
 
         String email = principal.getName();
-        System.out.println("!!!!!!!!!!!!!!!");
-        System.out.println("email : " + email);
-
         Long orderId;
 
         try {
@@ -78,5 +77,19 @@ public class OrderController {
 
         orderService.cancelOrder(orderId);
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
+
+    @GetMapping(value = {"/orders/memberOrders"})
+    public String memberOrders(MemberSearchFormDto memberSearchFormDto, Principal principal, Optional<Integer> page, Model model){
+
+        //memberSearchFormDto.setEmail(principal.getName());
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
+        Page<MemberOrderDto> memberOrders = orderService.getMemberOrderPage(memberSearchFormDto, pageable);
+
+        model.addAttribute("memberOrders", memberOrders);
+        model.addAttribute("page", pageable.getPageNumber());
+        model.addAttribute("maxPage", 5);
+
+        return "/order/orderMembers";
     }
 }
